@@ -1,8 +1,8 @@
 <template>
-  <div id="app" class="fillContent">
-    <head-nav class="nav"></head-nav>
-    <router-view></router-view>
-  </div>
+    <div id="app" class="fillContent">
+        <head-nav :class="{isHide:isHide}" ref="headNode"></head-nav>
+        <router-view></router-view>
+    </div>
 </template>
 
 
@@ -14,45 +14,27 @@
     data () {
       return {
         isShow: this.$store.state.show,
+        isHide: false
       }
     },
     methods: {
-      change () {
-        this.isShow = !this.isShow
-        this.$store.getters.token()
+      handleWheel (e) {
+        let eventDelta = e.wheelDelta || -e.deltaY * 40
+        console.log(eventDelta, this.isHide)
+        this.isHide = eventDelta < 0
       },
-      windowScroll () {
-        // 滚动条距离页面顶部的距离
-        // 以下写法原生兼容
-        let scrollTop =
-          window.pageYOffset ||
-          document.documentElement.scrollTop ||
-          document.body.scrollTop
+      test (e) {
+        this.isHide = (e.clientY > 60)
+        // console.log(this.isHide, e.clientY)
       }
     },
     mounted () {
-      window.addEventListener('scroll', this.windowScroll)
-      var navNode = document.querySelector('.nav')
-
-      function bind (obj, eventStr, callback) {
-        if (obj.addEventListener) {
-          obj.addEventListener(eventStr, callback, false)
-        } else {
-          obj.attachEvent('on' + eventStr, function () {
-            callback.call(obj)
-          })
-        }
-      }
-
-      document.onmousewheel = function (event) {
-        event = event || window.event
-        if (event.wheelDelta > 0 || event.detail < 0) {
-          navNode.style.top = '0px'
-        } else {
-          navNode.style.top = '-60px'
-        }
-      }
-      bind(document, 'DOMMouseScroll', document.onmousewheel)
+      window.addEventListener('wheel', this.handleWheel)
+      document.addEventListener('mousemove', this.test)
+    },
+    beforeDestroy () {
+      window.removeEventListener('wheel', this.handleWheel)
+      window.removeEventListener('mousemove', this.test)
     },
     components: {
       headNav
@@ -61,5 +43,5 @@
 </script>
 
 <style>
-  @import "./assets/css/style.css";
+    @import "./assets/css/style.css";
 </style>

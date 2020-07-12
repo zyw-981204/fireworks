@@ -7,9 +7,9 @@ import errorCode from './errorCode' //错误码
 axios.defaults.headers['Content-Type'] = 'application/json;charset=utf-8'
 // 封装axios 请求
 const service = axios.create({
-  baseURL: process.env.VUE_APP_BASE_API === 'development' ? '' : '',
+  // baseURL: '/api/v1',
   // 判断是否是开发环境 如果是开发环境则加前者 不是则加后者
-  timeout: 6000,
+  timeout: 1000 * 60 * 10,
   // 设置超时
   headers: { /*解决ie自动缓存*/
     'cache-control': 'no-cache',
@@ -72,7 +72,7 @@ service.interceptors.response.use(res => {
     Message({
       message: error.message,
       type: 'error',
-      duration: 5 * 1000
+      duration: 3 * 1000
     })
     return Promise.reject(error)
   }

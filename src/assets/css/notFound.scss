@@ -1,0 +1,20 @@
+.NotFind {
+  width: 100%;
+  background: url(../img/404_bg.png) 50% 130px no-repeat;
+  overflow: hidden;
+  height: 1000px;
+
+  .notFound_tips {
+    width: 100%;
+    margin-top: 400px;
+    color: rgb(61, 54, 148);
+    font-weight: bold;
+    font-size: 30px;
+
+    div {
+      margin-bottom: 50px;
+    }
+  }
+
+  text-align: center;
+}

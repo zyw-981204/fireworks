@@ -1,20 +1,28 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 
+
 Vue.use(Vuex)
-const store = new  Vuex.Store({
+const store = new Vuex.Store({
   state: {
-    token: null
+    userInfo: {
+      username:'',
+      password:'',
+      uuid:'',
+      token: null
+    }
   },
   mutations: {
     setToken (state, data) {
-      state.token = data
+      state.userInfo.token = data
     },
     removeToken (state) {
-      state.token = null
+      state.userInfo.token = null
+    },
+    // this.$store.commit('setToken', 'userInfo.token')
+    setUserInfo(state, param){
+      state.userInfo = param;
     }
-    // this.$store.commit('setToken', 'token')
-
   },
   actions: {
     // this.$store.dispatch('asyRemoveToken')
@@ -31,7 +39,7 @@ const store = new  Vuex.Store({
   },
   getters: {
     token: state => {
-      return state.token
+      return state.userInfo.token
     }
   }
 

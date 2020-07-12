@@ -1,0 +1,25 @@
+// 主页的背景
+.fillContent {
+  min-width: 1000px;
+  width: 100%;
+  min-height: 768px;
+  background: url(../img/load_bg1.jpg) no-repeat fixed;
+  //背景图引入 fixed 可以让背景不动
+  background-size: cover
+
+
+}
+
+// 主页的背景
+// loading页面的样式
+.content {
+  min-width: 1000px;
+  min-height: 1080px;
+  overflow-y: hidden;
+}
+
+@import "./login.css";
+@import "./register.css";
+@import "./header.css";
+@import "./notFound.css";
+@import "./welcome.css";

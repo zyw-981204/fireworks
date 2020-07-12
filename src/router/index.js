@@ -1,12 +1,14 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import store from '../store/store'
-import login from '../views/login'
-import welcome from '../views/welcome'
-import notFind from '../views/notFound'
-import register from '../views/register'
-import photoWall from '../views/photoWall'
+
 import Cookies from 'js-cookie'
+//
+const login = () => import('../views/login')
+const welcome = () => import('../views/welcome')
+const notFind = () => import('../views/notFound')
+const register = () => import('../views/register')
+const photoWall = () => import('../views/photoWall')
 
 Vue.use(Router)
 
@@ -29,12 +31,12 @@ const router = new Router({
       path: '/user/welcome',
       name: 'welcome',
       meta: {
-        requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
+        requireAuth: false // 添加该字段，表示进入这个路由是需要登录的
       },
       component: welcome
     },
     {
-      path: '/photoWall',
+      path: '/user/photoWall',
       name: 'photoWall',
       meta: {
         requireAuth: true // 添加该字段，表示进入这个路由是需要登录的
@@ -45,7 +47,7 @@ const router = new Router({
       path: '/admin',
       name: 'admin',
       component: photoWall,
-      hidden:true,
+      hidden: true,
       children: [
         {
           path: 'login',
@@ -74,7 +76,7 @@ router.beforeEach((to, from, next) => {
       next()
     } else {
       next({
-        path: '/login',
+        path: '/user/login',
         query: { redirect: to.fullPath }  // 将跳转的路由path作为参数，登录成功后跳转到该路由
       })
     }

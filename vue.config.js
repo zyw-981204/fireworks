@@ -4,6 +4,12 @@
 
 const path = require('path')
 
+// 开启g-zip 插件
+const webpack = require('webpack')
+const CompressionWebpackPlugin = require('compression-webpack-plugin')
+const productionGzipExtensions = ['js', 'css']
+
+
 const defaultSettings = require('./src/settings.js')
 // 一些关于项目的默认设置
 
@@ -37,6 +43,8 @@ module.exports = {
   devServer: {
     host: 'localhost', // can be overwritten by process.env.HOST
     port, // can be overwritten by process.env.PORT, if port is in use, a free one will be determined
+    open: true, //配置自动启动浏览器
+    hotOnly: true, // 热更新
     proxy: {
       '/api/v1': {//匹配项
         target: 'http://127.0.0.1:8083',// 接口的域名
@@ -55,7 +63,22 @@ module.exports = {
         '@': resolve('src')
         // 设置src的别名
       }
-    }
+    },
+    plugins: [
+      new webpack.IgnorePlugin(/^\.\/locale$/, /moment$/),
+
+      // 下面是下载的插件的配置
+      new CompressionWebpackPlugin({
+        algorithm: 'gzip',
+        test: new RegExp('\\.(' + productionGzipExtensions.join('|') + ')$'),
+        threshold: 10240,
+        minRatio: 0.8
+      }),
+      new webpack.optimize.LimitChunkCountPlugin({
+        maxChunks: 5,
+        minChunkSize: 100
+      }),
+    ]
   },
   chainWebpack (config) {
     config.plugins.delete('preload') // TODO: need test
@@ -93,14 +116,7 @@ module.exports = {
     config
       .when(process.env.NODE_ENV !== 'development',
         config => {
-          config
-            .plugin('ScriptExtHtmlWebpackPlugin')
-            .after('html')
-            .use('script-ext-html-webpack-plugin', [{
-              // `runtime` must same as runtimeChunk name. default is `runtime`
-              inline: /runtime\..*\.js$/
-            }])
-            .end()
+
           config
             .optimization.splitChunks({
             chunks: 'all',

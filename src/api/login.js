@@ -9,10 +9,10 @@ export const login = data => {
     data
   })
 }
-
-export const sentValidateCode = () =>{
+export const sentValidateCode = data => {
   return service({
-    method:"post",
-    url:`${base.user}/active`
+    method: 'post',
+    url: `${base.user}/active`,
+    data
   })
 }

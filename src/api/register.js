@@ -1,10 +1,11 @@
 import service from '../utils/require'
+import base from './base'
 
 export const submitRegisterFrom = data => {
 // 提交注册表单
   return service({
     method: 'post',
-    url: '/register',
+    url: `${base.user}/register`,
     data
   })
 }
