@@ -4,7 +4,7 @@ import store from '../store/store'
 
 import Cookies from 'js-cookie'
 //
-const login = () => import('../views/login')
+const login = () => import('../views/login_1')
 const welcome = () => import('../views/welcome')
 const notFind = () => import('../views/notFound')
 const register = () => import('../views/register')

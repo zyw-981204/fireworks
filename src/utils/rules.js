@@ -1,3 +1,14 @@
+let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/
+// 定义了一个正则 判断两次密码不能相同
+let validateConfirmPwd = (rule, value, callback) => {// eslint-disable-line no-unused-vars
+  if (!reg.test(value)) {
+    callback(new Error('密码应是8-20位数字、字母或字符！'))
+  } else if (this.ruleFormData.password !== value) {
+    callback(new Error('两次密码输入不一致！'))
+  } else {
+    callback()
+  }
+}
 const rules = {
   verifyCode: [
     {

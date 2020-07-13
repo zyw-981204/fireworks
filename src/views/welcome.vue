@@ -19,9 +19,8 @@
       }
     },
     methods: {
-      scrollToTop (event) {
-        var scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
-        console.log(`firstIn:${this.firstIn}, this.inStillShow:${this.inStillShow}, scrollTop:${scrollTop}, this.isUp:${this.isUp}, this.count:${this.count}`)
+      scrollToTop () {
+        let scrollTop = window.pageYOffset || document.documentElement.scrollTop || document.body.scrollTop
         if (this.isUp === true && scrollTop === 0) {
           this.count++
         }
@@ -42,7 +41,6 @@
           this.firstIn = false
           this.count = -9999
         }
-
       },
       judgeIsUp (e) {
         const eventDelta = e.wheelDelta || -e.deltaY * 40
@@ -51,14 +49,13 @@
     },
     mounted () {
       this.$refs.imgNode.style.height = screen.availHeight + 'px'
-      console.log(screen.availHeight, this.$refs.imgNode.style.height)
       this.imageHeight = this.$refs.imgNode.offsetHeight
       window.addEventListener('scroll', this.scrollToTop)
-      window, addEventListener('wheel', this.judgeIsUp)
+      window.addEventListener('wheel', this.judgeIsUp)
     },
     destroyed () {
       window.removeEventListener('scroll', this.scrollToTop)
-      window, removeEventListener('wheel', this.judgeIsUp)
+      window.removeEventListener('wheel', this.judgeIsUp)
     }
   }
 </script>

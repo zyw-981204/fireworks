@@ -65,7 +65,7 @@
                 </el-form>
                 <div class="validateCode">
                     <div>验证码</div>
-                    <img :src="verifyCodeImg" alt="验证码" @click="getVerifyCode_switch"/>
+                    <img :src="verifyCodeImg" alt="验证码" @click="getVerifyCodeImg"/>
                 </div>
 
                 <div class="reg-reset-box">
@@ -78,26 +78,14 @@
 </template>
 
 <script>
-  import { submitRegisterFrom, getVerifyCode } from '../api/register.js'
   import rules from '../utils/rules'
+  import { submitRegisterFrom, getVerifyCode } from '../api/register.js'
 
-  let reg = /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/
-  // 定义了一个正则
-  let validateConfirmPwd = (rule, value, callback) => {
-    if (!reg.test(value)) {
-      callback(new Error('密码应是8-20位数字、字母或字符！'))
-    } else if (this.ruleFormData.password !== value) {
-      callback(new Error('两次密码输入不一致！'))
-    } else {
-      callback()
-    }
-  }
   export default {
     name: 'register',
     data () {
       return {
         verifyCodeBase64: '',
-        verifyCodeImg: '',
         ruleFormData: {
           username: '',
           password: '',
@@ -127,41 +115,38 @@
                 if (res.code === 200) {
                   this.$router.push('/login')
                 } else {
-                  this.getVerifyCode_switch()
+                  this.getVerifyCodeImg()
                 }
               })
               .catch((err) => {
-                this.alert(`遇到${err.msg} 错误代码为${err.code}`)
-                this.getVerifyCode_switch()
+                this.$alert(`遇到${err.msg} 错误代码为${err.code}`)
+                this.getVerifyCodeImg()
               })
           } else {
-            alert('请核对信息是否输入完成')
+            this.$alert('请核对信息是否输入完成')
             return false
           }
         })
       },
-      getVerifyCode_switch () {
+      getVerifyCodeImg () {
         // this.verifyCodeSwitch()
         getVerifyCode().then((res) => {
           this.ruleFormData.uuid = res.uuid
           this.verifyCodeBase64 = res.img
-          this.verifyCodeSwitch()
-          console.log(`base64:${this.verifyCodeBase64}`, `img:${this.verifyCodeImg} `)
-          console.log(`res:${res}`)
         })
           .catch((err) => {
-            this.$message('遇到错误')
-            getVerifyCode()
+            this.$message('因网络问题，验证码获取失败，请稍后重试')
             console.log(err)
           })
-      },
-      verifyCodeSwitch () {
-        this.verifyCodeImg = `data:image/jpeg;base64,${this.verifyCodeBase64}`
-        console.log(`base64:${this.verifyCodeBase64}`, `img:${this.verifyCodeImg} `)
+      }
+    },
+    computed: {
+        verifyCodeImg: function () {
+          return `data:image/jpeg;base64,${this.verifyCodeBase64}`
       }
     },
     mounted () {
-      this.getVerifyCode_switch()
+      this.getVerifyCodeImg()
     }
   }
 </script>
