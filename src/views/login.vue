@@ -56,42 +56,20 @@
     </div>
 </template>
 <script>
+
+  import Cookies from 'js-cookie'
+  import rules from '../utils/rules'
+  import store from '../store/store'
   import { login, sentValidateCode } from '../api/login.js'
   import { encrypt, decrypt } from '../utils/jsencrypt'
-  import Cookies from 'js-cookie'
-  import store from '../store/store'
   import { inputAccount, activeCodePrompt } from '../utils/loginMessage'
 
   export default {
     name: 'login',
     data () {
       return {
-        rules: {
-          username: [
-            { required: true, message: '请输入昵称', trigger: 'blur' },
-            {
-              min: 1,
-              max: 20,
-              message: '长度在 3 到 10 个字符',
-              trigger: 'blur'
-            },
-            {
-              required: true,
-              pattern: /^[\u4e00-\u9fa5_a-zA-Z0-9.·-]+$/,
-              message: '请输入正确的账号/昵称',
-              trigger: 'blur'
-            }
-          ],
-          password: [
-            { required: true, message: '请输入密码', trigger: 'blur' },
-            {
-              required: true,
-              pattern: /^(?![0-9]+$)(?![a-zA-Z]+$)[0-9A-Za-z]{6,20}$/,
-              message: '密码应该是包含 数字和英文，长度6-20',
-              trigger: 'blur'
-            }
-          ]
-        },
+        rules: rules
+        ,
         loginFrom: { //用户信息表单
           username: 'admin',
           password: 'zyw123123',
@@ -162,7 +140,7 @@
             this.loginAnimationToggle()
             login(this.loginFrom)
               .then((res) => {
-                if (res.data.code == 200) {
+                if (res.data.code === 200) {
                   this.loginFrom.uuid = res.data.uuid
                   this.loginFrom.token = res.data.token
                   this.setUserInfo()
@@ -178,7 +156,7 @@
                   this.loginAnimationToggle()
                 }
               })
-              .catch((err) => {
+              .catch(() => {
                 this.$message({
                   type: 'info',
                   message: `请重新输入账号密码`,
